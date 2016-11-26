@@ -97,7 +97,9 @@ int WINAPI wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			  << "                  Consola de depanare                " << std::endl
 	          << "                  -------------------                " << std::endl;
 #endif
-	Physics::PhysicsManager physicsManager;
+	Physics::PhysicsManager physicsManager(4.0/3.0); //todo
+
+	
 
     UNREFERENCED_PARAMETER( hPrevInstance );
     UNREFERENCED_PARAMETER( lpCmdLine );
@@ -118,6 +120,9 @@ int WINAPI wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		logInfo("Initialized device");
 	}
 
+	physicsManager.setDevice(g_pd3dDevice);
+	physicsManager.setDeviceContext(g_pImmediateContext);
+	physicsManager.DebugGenerateRenderElement();
     // Main message loop
     MSG msg = {0};
     while( WM_QUIT != msg.message )
@@ -129,7 +134,9 @@ int WINAPI wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         }
         else
         {
-            Render();
+			g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, Colors::MidnightBlue );
+			physicsManager.Render();
+			g_pSwapChain->Present( 0, 0 );
         }
     }
 
@@ -435,6 +442,7 @@ HRESULT InitDevice()
         { XMFLOAT3( 1.0f, -1.0f, 1.0f ), XMFLOAT4( 1.0f, 1.0f, 1.0f, 1.0f ) },
         { XMFLOAT3( -1.0f, -1.0f, 1.0f ), XMFLOAT4( 0.0f, 0.0f, 0.0f, 1.0f ) },
     };
+
     D3D11_BUFFER_DESC bd;
 	ZeroMemory( &bd, sizeof(bd) );
     bd.Usage = D3D11_USAGE_DEFAULT;
