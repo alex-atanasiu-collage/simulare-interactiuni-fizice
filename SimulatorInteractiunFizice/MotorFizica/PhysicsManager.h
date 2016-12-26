@@ -24,17 +24,13 @@ namespace Physics{
 			ID3D11PixelShader* m_pPixelShader;
 			ID3D11InputLayout* m_pVertexLayout;
 			float m_screenRatio;
-			
-			XMMATRIX m_World;
-			XMMATRIX m_View;
-			XMMATRIX m_Projection;
 
 		public:
 			PhysicsManager(float screenRatio);
 			~PhysicsManager(void);
 
 			void DebugGenerateRenderElement();
-			void Render();
+			void Render(const XMMATRIX& WorldMatrix,const XMMATRIX& viewMatrix,const XMMATRIX& projectionMatrix);
 
 			inline void setDevice(ID3D11Device* pd3dDevice) { m_pd3dDevice = pd3dDevice; }
 			inline void setDeviceContext(ID3D11DeviceContext* pImmediateContext) { m_pImmediateContext = pImmediateContext; }

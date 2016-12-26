@@ -168,16 +168,16 @@ void PhysicsManager::DebugGenerateRenderElement()
 
 	
     // Initialize the world matrix
-	m_World = XMMatrixIdentity();
+	//m_World = XMMatrixIdentity();
 
     // Initialize the view matrix
 	XMVECTOR Eye = XMVectorSet( 0.0f, 1.0f, -5.0f, 0.0f );
 	XMVECTOR At = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
 	XMVECTOR Up = XMVectorSet( 0.0f, 1.0f, 0.0f, 0.0f );
-	m_View = XMMatrixLookAtLH( Eye, At, Up );
+	//m_View = XMMatrixLookAtLH( Eye, At, Up );
 
     // Initialize the projection matrix
-	m_Projection = XMMatrixPerspectiveFovLH( XM_PIDIV2,m_screenRatio, 0.01f, 100.0f );
+	//m_Projection = XMMatrixPerspectiveFovLH( XM_PIDIV2,m_screenRatio, 0.01f, 100.0f );
 
 
 	// Compile the vertex shader
@@ -242,11 +242,12 @@ PhysicsManager::~PhysicsManager(void)
 	logInfoP("Physics Manager succesfully destroyed");
 }
 
-void PhysicsManager::Render(){
+void PhysicsManager::Render(const XMMATRIX& worldMatrix,const XMMATRIX& viewMatrix ,const XMMATRIX& projectionMatrix){
+
 	ConstantBuffer cb;
-	cb.mWorld = XMMatrixTranspose( m_World );
-	cb.mView = XMMatrixTranspose( m_View );
-	cb.mProjection = XMMatrixTranspose( m_Projection );
+	cb.mWorld = XMMatrixTranspose( worldMatrix );
+	cb.mView = XMMatrixTranspose( viewMatrix );
+	cb.mProjection = XMMatrixTranspose( projectionMatrix );
 	m_pImmediateContext->UpdateSubresource( m_pConstantBuffer, 0, nullptr, &cb, 0, 0 );
 
 	m_pImmediateContext->VSSetShader( m_pVertexShader, nullptr, 0 );
